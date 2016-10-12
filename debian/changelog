@@ -5,6 +5,8 @@ nginx (1.10.1-4) UNRELEASED; urgency=medium
       Fixes lintian init.d-script-needs-depends-on-lsb-base.
   * debian/rules:
     + Drop --with-ipv6 flag, it is now enabled by default if IPv6 is tsupported.
+  * debian/patches:
+    + Drop perl build flags patch, it is now handled upstream.
 
  -- Christos Trochalakis <yatiohi@ideopolis.gr>  Tue, 11 Oct 2016 10:00:23 +0300
 
