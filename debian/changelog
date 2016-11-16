@@ -1,3 +1,12 @@
+nginx (1.11.6-1~exp1) experimental; urgency=medium
+
+  * New upstream version 1.11.6.
+  * Drop --with-ipv6 flag, IPv6 support is enabled automatically.
+  * Drop perl build flags patch, it is now handled upstream.
+  * Patch nginx-upstream-fair to build against nginx 1.11.6.
+
+ -- Christos Trochalakis <yatiohi@ideopolis.gr>  Wed, 16 Nov 2016 10:37:25 +0200
+
 nginx (1.10.2-2) unstable; urgency=medium
 
   * Build against OpenSSL 1.1.0. (Closes: #828453)
