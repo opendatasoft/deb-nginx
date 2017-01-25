@@ -1,3 +1,13 @@
+nginx (1.11.9-1~exp1) experimental; urgency=medium
+
+  * New upstream version 1.11.9.
+  * Drop curve list patch, it is included upstream.
+  * Drop --with-ipv6 flag, IPv6 support is enabled automatically.
+  * Drop perl build flags patch, it is now handled upstream.
+  * Patch nginx-upstream-fair to build against nginx 1.11.6.
+
+ -- Christos Trochalakis <ctrochalakis@debian.org>  Wed, 25 Jan 2017 15:03:51 +0200
+
 nginx (1.10.2-4) unstable; urgency=medium
 
   * Switch module reloading logic to dpkg triggers.
