@@ -1,7 +1,7 @@
 nginx (1.11.9-1~exp2) experimental; urgency=medium
 
   * debian/rules:
-    + Configure build flags to work with other arch and downstream.
+    - Configure build flags to work with other arches and downstreams.
       Thanks to Thomas Ward.
 
  -- Michael Lustfield <michael@lustfield.net>  Thu, 26 Jan 2017 20:41:23 -0600
