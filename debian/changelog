@@ -1,3 +1,9 @@
+nginx (1.13.1-2~bpo9+1) stretch-backports; urgency=medium
+
+  * Rebuild for stretch-backports.
+
+ -- Christos Trochalakis <ctrochalakis@debian.org>  Tue, 27 Jun 2017 09:59:06 +0300
+
 nginx (1.13.1-2) unstable; urgency=medium
 
   * Upload to unstable.
