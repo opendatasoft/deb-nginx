@@ -1,3 +1,12 @@
+nginx (1.10.3-1+deb9u1~bpo8+1) jessie-backports; urgency=medium
+
+  * Rebuild for jessie-backports.
+  * Build against openssl 1.0.2 enabling ALPN support for http/2.
+  * Fix PIE issues for jessie.
+  * Disable ec-x25519 test.
+
+ -- Christos Trochalakis <ctrochalakis@debian.org>  Thu, 13 Jul 2017 10:22:30 +0300
+
 nginx (1.10.3-1+deb9u1) stretch-security; urgency=high
 
   * Handle CVE-2017-7529 Integer overflow in the range filter (Closes: #868109)
