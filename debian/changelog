@@ -1,3 +1,9 @@
+nginx (1.10.3-1+deb9u1~bpo8+2) jessie-backports; urgency=medium
+
+  * Rebuild on a jessie box.
+
+ -- Christos Trochalakis <ctrochalakis@debian.org>  Fri, 14 Jul 2017 09:47:12 +0300
+
 nginx (1.10.3-1+deb9u1~bpo8+1) jessie-backports; urgency=medium
 
   * Rebuild for jessie-backports.
