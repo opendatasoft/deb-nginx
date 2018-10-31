@@ -1,0 +1,147 @@
+# vim: filetype=sh
+
+# If $NGX_IGNORE_RPATH is set to "YES", we will ignore explicit
+# library path specification on resulting binary, allowing libmodsecurity.so
+# to be relocated across configured library pathes (adjust /etc/ld.so.conf
+# or set $LD_LIBRARY_PATH environment variable to manage them)
+#
+# $YAJL_LIB variable may need to be populated in case of non-standard
+# path of libyajl.so's installation
+
+ngx_feature_name=
+ngx_feature_run=no
+ngx_feature_incs="#include <modsecurity/modsecurity.h>"
+ngx_feature_libs="-lmodsecurity"
+ngx_feature_test='printf("hello");'
+ngx_modsecurity_opt_I=
+ngx_modsecurity_opt_L=
+
+YAJL_EXTRA=
+if test -n "$YAJL_LIB"; then
+    YAJL_EXTRA="-L$YAJL_LIB -lyajl"
+fi
+
+# If $MODSECURITY_INC is specified, lets use it. Otherwise lets try
+# the default paths
+#
+if [ -n "$MODSECURITY_INC" -o -n "$MODSECURITY_LIB" ]; then
+    # explicitly set ModSecurity lib path
+    ngx_feature="ModSecurity library in \"$MODSECURITY_LIB\" and \"$MODSECURITY_INC\" (specified by the MODSECURITY_LIB and MODSECURITY_INC env)"
+    ngx_feature_path="$MODSECURITY_INC"
+    ngx_modsecurity_opt_I="-I$MODSECURITY_INC"
+    ngx_modsecurity_opt_L="-L$MODSECURITY_LIB $YAJL_EXTRA"
+
+    if [ $NGX_RPATH = YES ]; then
+        ngx_feature_libs="-R$MODSECURITY_LIB -L$MODSECURITY_LIB -lmodsecurity $YAJL_EXTRA"
+    elif [ "$NGX_IGNORE_RPATH" != "YES" -a $NGX_SYSTEM = "Linux" ]; then
+        ngx_feature_libs="-Wl,-rpath,$MODSECURITY_LIB -L$MODSECURITY_LIB -lmodsecurity $YAJL_EXTRA"
+    else
+        ngx_feature_libs="-L$MODSECURITY_LIB -lmodsecurity $YAJL_EXTRA"
+    fi
+
+    . auto/feature
+
+    if [ $ngx_found = no ]; then
+        cat << END
+        $0: error: ngx_http_modsecurity_module requires the ModSecurity library and MODSECURITY_LIB is defined as "$MODSECURITY_LIB" and MODSECURITY_INC (path for modsecurity.h) "$MODSECURITY_INC", but we cannot find ModSecurity there.
+END
+        exit 1
+    fi
+else
+    # auto-discovery
+    ngx_feature="ModSecurity library"
+    ngx_feature_libs="-lmodsecurity"
+
+    . auto/feature
+
+    if [ $ngx_found = no ]; then
+        ngx_feature="ModSecurity library in /usr/local/modsecurity"
+        ngx_feature_path="/usr/local/modsecurity/include"
+        if [ $NGX_RPATH = YES ]; then
+            ngx_feature_libs="-R/usr/local/modsecurity/lib -L/usr/local/modsecurity/lib -lmodsecurity"
+        elif [ "$NGX_IGNORE_RPATH" != "YES" -a $NGX_SYSTEM = "Linux" ]; then
+            ngx_feature_libs="-Wl,-rpath,/usr/local/modsecurity/lib -L/usr/local/modsecurity/lib -lmodsecurity"
+        else
+            ngx_feature_libs="-L/usr/local/modsecurity/lib -lmodsecurity"
+        fi
+
+        . auto/feature
+
+    fi
+fi
+
+
+
+if [ $ngx_found = no ]; then
+ cat << END
+ $0: error: ngx_http_modsecurity_module requires the ModSecurity library.
+END
+ exit 1
+fi
+
+
+ngx_addon_name=ngx_http_modsecurity_module
+
+if test -n "$ngx_module_link"; then
+	ngx_module_type=HTTP_FILTER
+	ngx_module_name="$ngx_addon_name"
+	ngx_module_srcs="$ngx_addon_dir/src/ngx_http_modsecurity_module.c \
+            $ngx_addon_dir/src/ngx_http_modsecurity_pre_access.c \
+            $ngx_addon_dir/src/ngx_http_modsecurity_header_filter.c \
+            $ngx_addon_dir/src/ngx_http_modsecurity_body_filter.c \
+            $ngx_addon_dir/src/ngx_http_modsecurity_log.c \
+            $ngx_addon_dir/src/ngx_http_modsecurity_rewrite.c \
+            "
+	ngx_module_deps="$ngx_addon_dir/src/ddebug.h \
+            $ngx_addon_dir/src/ngx_http_modsecurity_common.h \
+            "
+        ngx_module_libs="$ngx_feature_libs"
+        ngx_module_incs="$ngx_feature_path"
+
+        ngx_module_order="ngx_http_chunked_filter_module ngx_http_v2_filter_module $ngx_module_name ngx_http_range_header_filter_module" 
+
+	. auto/module
+else
+	CFLAGS="$ngx_modsecurity_opt_I $CFLAGS"
+	NGX_LD_OPT="$ngx_modsecurity_opt_L $NGX_LD_OPT"
+
+	CORE_INCS="$CORE_INCS $ngx_feature_path"
+	CORE_LIBS="$CORE_LIBS $ngx_feature_libs"
+
+	HTTP_FILTER_MODULES="$HTTP_FILTER_MODULES ngx_http_modsecurity_module"
+	NGX_ADDON_SRCS="\
+	    $NGX_ADDON_SRCS \
+	    $ngx_addon_dir/src/ngx_http_modsecurity_module.c \
+	    $ngx_addon_dir/src/ngx_http_modsecurity_pre_access.c \
+	    $ngx_addon_dir/src/ngx_http_modsecurity_header_filter.c \
+	    $ngx_addon_dir/src/ngx_http_modsecurity_body_filter.c \
+	    $ngx_addon_dir/src/ngx_http_modsecurity_log.c \
+	    $ngx_addon_dir/src/ngx_http_modsecurity_rewrite.c \
+	    "
+
+	NGX_ADDON_DEPS="\
+	    $NGX_ADDON_DEPS \
+	    $ngx_addon_dir/src/ddebug.h \
+	    $ngx_addon_dir/src/ngx_http_modsecurity_common.h \
+	    "
+fi
+
+#
+# Nginx does not provide reliable way to introduce our module into required
+# place in static ($ngx_module_link=ADDON) compilation mode, so we should
+# explicitly update module "ordering rules".
+#
+# Default runtime location of ngx_http_modsecurity_module is right before
+# ngx_http_chunked_filter_module, but in case if ngx_http_v2_filter_module is
+# compiled in, we should put our module before ngx_http_v2_filter_module in
+# order to support SecRules processing for HTTP/2.0 requests.
+#
+if [ "$ngx_module_link" != DYNAMIC ] ; then
+    pre_module='ngx_http_chunked_filter_module'
+    if [ "$HTTP_V2" = "YES" ]; then
+        pre_module='ngx_http_v2_filter_module'
+    fi
+    HTTP_FILTER_MODULES=`echo $HTTP_FILTER_MODULES | \
+        sed -E "s/$ngx_addon_name/ /g" | \
+        sed -E "s/$pre_module/$pre_module $ngx_addon_name/g"`
+fi

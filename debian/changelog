@@ -1,10 +1,12 @@
-nginx (1.14.0-2) UNRELEASED; urgency=low
+nginx (1.14.0-2~1.gbp5d2103) UNRELEASED; urgency=low
+
+  ** SNAPSHOT build @5d21039949aa4b8dd9bbfff120a1cf0bd881b786 **
 
   [ Kartik Mistry ]
   * Removed unused lintian override.
   * Fixed trailing whitespaces in changelog.
 
- -- Kartik Mistry <kartik@debian.org>  Thu, 06 Sep 2018 16:20:03 +0530
+ -- Kevin Roy <kiniou@gmail.com>  Wed, 31 Oct 2018 16:41:50 +0100
 
 nginx (1.14.0-1) unstable; urgency=medium
 

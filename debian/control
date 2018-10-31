@@ -17,6 +17,7 @@ Build-Depends: debhelper (>= 10),
                libperl-dev,
                libssl-dev,
                libxslt1-dev,
+               libmodsecurity-dev,
                po-debconf,
                quilt,
                zlib1g-dev
@@ -151,6 +152,7 @@ Depends: libnginx-mod-http-auth-pam (= ${binary:Version}),
          libnginx-mod-mail (= ${binary:Version}),
          libnginx-mod-nchan (= ${binary:Version}),
          libnginx-mod-stream (= ${binary:Version}),
+         libnginx-mod-modsecurity (= ${binary:Version}),
          nginx-common (= ${source:Version}),
          ${misc:Depends},
          ${shlibs:Depends}
@@ -390,3 +392,15 @@ Description: RTMP support for Nginx
   - Stream relay support via a push or pull model;
   - Integrated stream recording;
   - and more.
+
+Package: libnginx-mod-modsecurity
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: ModSecurity v3 support for Nginx
+ The ModSecurity-nginx connector is the connection point between nginx and
+ libmodsecurity (ModSecurity v3). Said another way, this project provides a
+ communication channel between nginx and libmodsecurity. This connector is
+ required to use LibModSecurity with nginx.
+ .
+ The ModSecurity-nginx connector takes the form of an nginx module. The module
+ simply serves as a layer of communication between nginx and ModSecurity.
