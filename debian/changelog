@@ -1,12 +1,19 @@
-nginx (1.14.0-2~1.gbp5d2103) UNRELEASED; urgency=low
+nginx (1.15.5) UNRELEASED; urgency=medium
 
-  ** SNAPSHOT build @5d21039949aa4b8dd9bbfff120a1cf0bd881b786 **
+  ** SNAPSHOT build @571c0e7dd28a3047254ad2ecb0255a66d42ce4fc **
 
   [ Kartik Mistry ]
   * Removed unused lintian override.
   * Fixed trailing whitespaces in changelog.
 
- -- Kevin Roy <kiniou@gmail.com>  Wed, 31 Oct 2018 16:41:50 +0100
+  [ Kevin Roy ]
+  * introducing modsecurity module for nginx
+  * New upstream version 1.15.5
+  * introducing modsecurity module for nginx
+  * New upstream version 1.15.5
+  * UNRELEASED
+
+ -- Kevin Roy <kiniou@gmail.com>  Fri, 02 Nov 2018 17:12:19 +0100
 
 nginx (1.14.0-1) unstable; urgency=medium
 
