@@ -1,0 +1,17 @@
+
+# ignore debian build artifacts
+.pc
+debian/nginx-*.*
+debian/nginx-common/
+debian/nginx-doc/
+debian/nginx-extras/
+debian/nginx-full/
+debian/nginx-light/
+debian/nginx.substvars
+debian/nginx/
+debian/.debhelper
+debian/build-*
+debian/libnginx-mod-*
+
+debian/files
+debian/debhelper-build-stamp
