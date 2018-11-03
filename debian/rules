@@ -26,7 +26,7 @@ DYN_MODS := \
 	nchan \
 	rtmp \
 	stream \
-	modsecurity
+	http-modsecurity
 
 MODULESDIR = $(CURDIR)/debian/modules
 BASEDIR = $(CURDIR)
@@ -137,7 +137,7 @@ extras_configure_flags := \
 			--add-dynamic-module=$(MODULESDIR)/http-uploadprogress \
 			--add-dynamic-module=$(MODULESDIR)/http-upstream-fair \
 			--add-dynamic-module=$(MODULESDIR)/http-subs-filter \
-			--add-dynamic-module=$(MODULESDIR)/modsecurity
+			--add-dynamic-module=$(MODULESDIR)/http-modsecurity
 
 %:
 	dh $@ --without autoreconf
