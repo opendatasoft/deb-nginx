@@ -152,7 +152,7 @@ Depends: libnginx-mod-http-auth-pam (= ${binary:Version}),
          libnginx-mod-mail (= ${binary:Version}),
          libnginx-mod-nchan (= ${binary:Version}),
          libnginx-mod-stream (= ${binary:Version}),
-         libnginx-mod-modsecurity (= ${binary:Version}),
+         libnginx-mod-http-modsecurity (= ${binary:Version}),
          nginx-common (= ${source:Version}),
          ${misc:Depends},
          ${shlibs:Depends}
@@ -393,7 +393,7 @@ Description: RTMP support for Nginx
   - Integrated stream recording;
   - and more.
 
-Package: libnginx-mod-modsecurity
+Package: libnginx-mod-http-modsecurity
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: ModSecurity v3 support for Nginx
