@@ -1,3 +1,15 @@
+nginx (1.15.5-1.1) UNRELEASED; urgency=medium
+
+  * Non-maintainer upload.
+  * [d/changelog] start packaging 1.15.5 (nginx/mainline)
+  * fix typo in version
+  * [debian] add missing modsecurity module .{so,conf} files
+  * [d/control] fixed modsecurity module
+  * fixed missing modsecurity module
+  * fixed naming of modsecurity module
+
+ -- Kevin Roy <kiniou@gmail.com>  Sat, 03 Nov 2018 22:11:59 +0100
+
 nginx (1.15.5-1) UNRELEASED; urgency=medium
 
   ** SNAPSHOT build @571c0e7dd28a3047254ad2ecb0255a66d42ce4fc **
