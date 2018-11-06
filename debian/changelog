@@ -1,3 +1,9 @@
+nginx (1.15.5-1opendatasoft2) xenial; urgency=medium
+
+  * rebuild for ubuntu xenial
+
+ -- Kevin Roy <kiniou@gmail.com>  Tue, 06 Nov 2018 12:42:00 +0100
+
 nginx (1.15.5-1opendatasoft1) stretch; urgency=medium
 
   * Non-maintainer upload.
