@@ -1,4 +1,4 @@
-nginx (1.15.5-1.1) UNRELEASED; urgency=medium
+nginx (1.15.5-1opendatasoft1) stretch; urgency=medium
 
   * Non-maintainer upload.
   * [d/changelog] start packaging 1.15.5 (nginx/mainline)
@@ -9,23 +9,6 @@ nginx (1.15.5-1.1) UNRELEASED; urgency=medium
   * fixed naming of modsecurity module
 
  -- Kevin Roy <kiniou@gmail.com>  Sat, 03 Nov 2018 22:11:59 +0100
-
-nginx (1.15.5-1) UNRELEASED; urgency=medium
-
-  ** SNAPSHOT build @571c0e7dd28a3047254ad2ecb0255a66d42ce4fc **
-
-  [ Kartik Mistry ]
-  * Removed unused lintian override.
-  * Fixed trailing whitespaces in changelog.
-
-  [ Kevin Roy ]
-  * introducing modsecurity module for nginx
-  * New upstream version 1.15.5
-  * introducing modsecurity module for nginx
-  * New upstream version 1.15.5
-  * UNRELEASED
-
- -- Kevin Roy <kiniou@gmail.com>  Fri, 02 Nov 2018 17:12:19 +0100
 
 nginx (1.14.0-1) unstable; urgency=medium
 
