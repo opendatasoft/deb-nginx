@@ -4,6 +4,7 @@ Priority: optional
 Maintainer: Debian Nginx Maintainers <pkg-nginx-maintainers@alioth-lists.debian.net>
 Uploaders: Christos Trochalakis <ctrochalakis@debian.org>
 Build-Depends: debhelper (>= 10),
+               dh-systemd,
                dpkg-dev (>= 1.15.5),
                libexpat-dev,
                libgd-dev,
