@@ -345,6 +345,11 @@ ngx_ssl_create(ngx_ssl_t *ssl, ngx_uint_t protocols, void *data)
     }
 #endif
 
+#ifdef SSL_CTX_set_min_proto_version
+    SSL_CTX_set_min_proto_version(ssl->ctx, 0);
+    SSL_CTX_set_max_proto_version(ssl->ctx, TLS1_2_VERSION);
+#endif
+
 #ifdef TLS1_3_VERSION
     SSL_CTX_set_min_proto_version(ssl->ctx, 0);
     SSL_CTX_set_max_proto_version(ssl->ctx, TLS1_3_VERSION);
@@ -1046,7 +1051,7 @@ cleanup:
                            ngx_close_file_n " \"%s\" failed", file->data);
     }
 
-    ngx_memzero(buf, NGX_SSL_PASSWORD_BUFFER_SIZE);
+    ngx_explicit_memzero(buf, NGX_SSL_PASSWORD_BUFFER_SIZE);
 
     return passwords;
 }
@@ -1063,7 +1068,7 @@ ngx_ssl_passwords_cleanup(void *data)
     pwd = passwords->elts;
 
     for (i = 0; i < passwords->nelts; i++) {
-        ngx_memzero(pwd[i].data, pwd[i].len);
+        ngx_explicit_memzero(pwd[i].data, pwd[i].len);
     }
 }
 
