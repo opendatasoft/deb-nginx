@@ -1,12 +1,76 @@
-nginx (1.14.0-2~1.gbp5d2103) UNRELEASED; urgency=low
-
-  ** SNAPSHOT build @5d21039949aa4b8dd9bbfff120a1cf0bd881b786 **
+nginx (1.15.8) unstable; urgency=medium
 
   [ Kartik Mistry ]
   * Removed unused lintian override.
   * Fixed trailing whitespaces in changelog.
 
- -- Kevin Roy <kiniou@gmail.com>  Wed, 31 Oct 2018 16:41:50 +0100
+  [ Kevin Roy ]
+  * introducing modsecurity module for nginx
+  * New upstream version 1.15.5
+
+  [ Christos Trochalakis ]
+  * New upstream version 1.14.1
+  * Release 1.14.1-1
+
+  [ Olaf van der Spek ]
+  * Reference PHP 7.3 (Closes: 913250)
+
+  [ Christos Trochalakis ]
+  * Adjust fastcgi_split_path_info snippet to handle the `/example.php/` case
+    (Closes: #911398)
+
+  [ Kevin Roy ]
+  * New upstream version 1.15.7
+
+  [ Christos Trochalakis ]
+  * New upstream version 1.14.2
+
+  [ Kartik Mistry ]
+  * Added Turkish translation (Closes: #915728)
+
+  [ Christos Trochalakis ]
+  * Release 1.14.2-1
+  * http-dav-ext: Upgrade to 3.0.0 (Closes: #851651)
+  * Use a minimal export of the upstream signing key
+  * Bump Standards-Version, no changes needed
+  * Release 1.14.2-2
+
+  [ Kevin Roy ]
+  * New upstream version 1.15.8
+  * introducing modsecurity module for nginx
+  * New upstream version 1.15.5
+
+  [ Christos Trochalakis ]
+  * New upstream version 1.14.1
+  * Release 1.14.1-1
+
+  [ Olaf van der Spek ]
+  * Reference PHP 7.3 (Closes: 913250)
+
+  [ Christos Trochalakis ]
+  * Adjust fastcgi_split_path_info snippet to handle the `/example.php/` case
+    (Closes: #911398)
+
+  [ Kevin Roy ]
+  * New upstream version 1.15.7
+
+  [ Christos Trochalakis ]
+  * New upstream version 1.14.2
+
+  [ Kartik Mistry ]
+  * Added Turkish translation (Closes: #915728)
+
+  [ Christos Trochalakis ]
+  * Release 1.14.2-1
+  * http-dav-ext: Upgrade to 3.0.0 (Closes: #851651)
+  * Use a minimal export of the upstream signing key
+  * Bump Standards-Version, no changes needed
+  * Release 1.14.2-2
+
+  [ Kevin Roy ]
+  * New upstream version 1.15.8
+
+ -- Kevin Roy <kiniou@gmail.com>  Thu, 27 Dec 2018 19:02:50 +0100
 
 nginx (1.14.0-1) unstable; urgency=medium
 
