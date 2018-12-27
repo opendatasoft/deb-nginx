@@ -1,3 +1,9 @@
+nginx (1.15.8-1ods1) stretch; urgency=medium
+
+  * Opendatasoft build for stretch
+
+ -- Kevin Roy <kiniou@gmail.com>  Thu, 27 Dec 2018 19:07:14 +0100
+
 nginx (1.15.8-1) unstable; urgency=medium
 
   [ Kartik Mistry ]
