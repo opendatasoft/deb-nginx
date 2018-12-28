@@ -1,4 +1,4 @@
-nginx (1.15.8) unstable; urgency=medium
+nginx (1.15.8-1) unstable; urgency=medium
 
   [ Kartik Mistry ]
   * Removed unused lintian override.
@@ -69,6 +69,7 @@ nginx (1.15.8) unstable; urgency=medium
 
   [ Kevin Roy ]
   * New upstream version 1.15.8
+  * New release 1.15.8-1
 
  -- Kevin Roy <kiniou@gmail.com>  Thu, 27 Dec 2018 19:02:50 +0100
 
