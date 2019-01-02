@@ -1,4 +1,4 @@
-nginx (1.15.8-1ods1) stretch; urgency=medium
+nginx (1.15.8-1ods.debian1) stretch; urgency=medium
 
   * Opendatasoft build for stretch
 
