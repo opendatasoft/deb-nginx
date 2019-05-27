@@ -14,7 +14,7 @@ nginx (1.14.0-1) unstable; urgency=medium
   * Merge ru translations.
     Thanks to Lev Lamberov (Closes: #883104)
 
- -- Christos Trochalakis <ctrochalakis@debian.org>  Fri, 31 Aug 2018 15:28:04 +0300
+ -- Kevin Roy <kiniou@gmail.com>  Mon, 27 May 2019 18:24:02 +0200
 
 nginx (1.13.12-1) unstable; urgency=medium
 
