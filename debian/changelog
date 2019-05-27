@@ -1,3 +1,9 @@
+nginx (1.17.0-1) UNRELEASED; urgency=medium
+
+  * Update changelog for 1.14.0-1 release
+
+ -- Kevin Roy <kiniou@gmail.com>  Mon, 27 May 2019 18:24:18 +0200
+
 nginx (1.14.0-1) unstable; urgency=medium
 
   [ Kartik Mistry ]
