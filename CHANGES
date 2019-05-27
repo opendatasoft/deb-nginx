@@ -1,4 +1,67 @@
 
+Changes with nginx 1.17.0                                        21 May 2019
+
+    *) Feature: variables support in the "limit_rate" and "limit_rate_after"
+       directives.
+
+    *) Feature: variables support in the "proxy_upload_rate" and
+       "proxy_download_rate" directives in the stream module.
+
+    *) Change: minimum supported OpenSSL version is 0.9.8.
+
+    *) Change: now the postpone filter is always built.
+
+    *) Bugfix: the "include" directive did not work inside the "if" and
+       "limit_except" blocks.
+
+    *) Bugfix: in byte ranges processing.
+
+
+Changes with nginx 1.15.12                                       16 Apr 2019
+
+    *) Bugfix: a segmentation fault might occur in a worker process if
+       variables were used in the "ssl_certificate" or "ssl_certificate_key"
+       directives and OCSP stapling was enabled.
+
+
+Changes with nginx 1.15.11                                       09 Apr 2019
+
+    *) Bugfix: in the "ssl_stapling_file" directive on Windows.
+
+
+Changes with nginx 1.15.10                                       26 Mar 2019
+
+    *) Change: when using a hostname in the "listen" directive nginx now
+       creates listening sockets for all addresses the hostname resolves to
+       (previously, only the first address was used).
+
+    *) Feature: port ranges in the "listen" directive.
+
+    *) Feature: loading of SSL certificates and secret keys from variables.
+
+    *) Workaround: the $ssl_server_name variable might be empty when using
+       OpenSSL 1.1.1.
+
+    *) Bugfix: nginx/Windows could not be built with Visual Studio 2015 or
+       newer; the bug had appeared in 1.15.9.
+
+
+Changes with nginx 1.15.9                                        26 Feb 2019
+
+    *) Feature: variables support in the "ssl_certificate" and
+       "ssl_certificate_key" directives.
+
+    *) Feature: the "poll" method is now available on Windows when using
+       Windows Vista or newer.
+
+    *) Bugfix: if the "select" method was used on Windows and an error
+       occurred while establishing a backend connection, nginx waited for
+       the connection establishment timeout to expire.
+
+    *) Bugfix: the "proxy_upload_rate" and "proxy_download_rate" directives
+       in the stream module worked incorrectly when proxying UDP datagrams.
+
+
 Changes with nginx 1.15.8                                        25 Dec 2018
 
     *) Feature: the $upstream_bytes_sent variable.
