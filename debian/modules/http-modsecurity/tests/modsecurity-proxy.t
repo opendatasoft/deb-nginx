@@ -1,21 +1,7 @@
 #!/usr/bin/perl
 
-#
-# ModSecurity, http://www.modsecurity.org/
-# Copyright (c) 2015 Trustwave Holdings, Inc. (http://www.trustwave.com/)
-#
-# You may not use this file except in compliance with
-# the License.  You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# If any of the files related to licensing are missing or if you have any
-# other questions related to licensing please contact Trustwave Holdings, Inc.
-# directly using the email address security@modsecurity.org.
-#
 
-
-# Tests for ModSecurity module.
+# Tests for ModSecurity over the http proxy module.
 
 ###############################################################################
 
@@ -34,7 +20,7 @@ use Test::Nginx;
 select STDERR; $| = 1;
 select STDOUT; $| = 1;
 
-my $t = Test::Nginx->new()->has(qw/http/);
+my $t = Test::Nginx->new()->has(qw/http proxy/)->plan(23);
 
 $t->write_file_expand('nginx.conf', <<'EOF');
 
@@ -53,13 +39,10 @@ http {
         server_name  localhost;
 
         location / {
-            modsecurity on;
-            modsecurity_rules '
-                SecRuleEngine On
-                SecRule ARGS "@streq whee" "id:10,phase:2"
-                SecRule ARGS "@streq whee" "id:11,phase:2"
-            ';
+            proxy_pass http://127.0.0.1:8081;
+            proxy_read_timeout 1s;
         }
+
         location /phase1 {
             modsecurity on;
             modsecurity_rules '
@@ -70,6 +53,8 @@ http {
                 SecRule ARGS "@streq block401" "id:3,phase:1,status:401,block"
                 SecRule ARGS "@streq block403" "id:4,phase:1,status:403,block"
             ';
+            proxy_pass http://127.0.0.1:8081;
+            proxy_read_timeout 1s;
         }
         location /phase2 {
             modsecurity on;
@@ -81,6 +66,8 @@ http {
                 SecRule ARGS "@streq block401" "id:3,phase:2,status:401,block"
                 SecRule ARGS "@streq block403" "id:4,phase:2,status:403,block"
             ';
+            proxy_pass http://127.0.0.1:8081;
+            proxy_read_timeout 1s;
         }
         location /phase3 {
             modsecurity on;
@@ -92,31 +79,38 @@ http {
                 SecRule ARGS "@streq block401" "id:3,phase:3,status:401,block"
                 SecRule ARGS "@streq block403" "id:4,phase:3,status:403,block"
             ';
+            proxy_pass http://127.0.0.1:8081;
+            proxy_read_timeout 1s;
         }
         location /phase4 {
             modsecurity on;
             modsecurity_rules '
                 SecRuleEngine On
+                SecResponseBodyAccess On
                 SecDefaultAction "phase:4,log,deny,status:403"
                 SecRule ARGS "@streq redirect301" "id:1,phase:4,status:301,redirect:http://www.modsecurity.org"
                 SecRule ARGS "@streq redirect302" "id:2,phase:4,status:302,redirect:http://www.modsecurity.org"
                 SecRule ARGS "@streq block401" "id:3,phase:4,status:401,block"
                 SecRule ARGS "@streq block403" "id:4,phase:4,status:403,block"
             ';
+            proxy_pass http://127.0.0.1:8081;
+            proxy_read_timeout 1s;
         }
     }
 }
+
 EOF
 
-$t->write_file("/phase1", "should be moved/blocked before this.");
-$t->write_file("/phase2", "should be moved/blocked before this.");
-$t->write_file("/phase3", "should be moved/blocked before this.");
-$t->write_file("/phase4", "should not be moved/blocked, headers delivered before phase 4.");
-$t->run();
 $t->todo_alerts();
-$t->plan(20);
+$t->run_daemon(\&http_daemon);
+$t->run()->waitforsocket('127.0.0.1:' . port(8081));
 
 ###############################################################################
+
+like(http_get('/'), qr/SEE-THIS/, 'proxy request');
+like(http_get('/multi'), qr/AND-THIS/, 'proxy request with multiple packets');
+
+unlike(http_head('/'), qr/SEE-THIS/, 'proxy head request');
 
 
 # Redirect (302)
@@ -144,8 +138,71 @@ like(http_get('/phase3?what=block403'), qr/403 Forbidden/, 'block 403 - phase 3'
 is(http_get('/phase4?what=block403'), '', 'block 403 - phase 4');
 
 # Nothing to detect
-like(http_get('/phase1?what=nothing'), qr/should be moved\/blocked before this./, 'nothing phase 1');
-like(http_get('/phase2?what=nothing'), qr/should be moved\/blocked before this./, 'nothing phase 2');
-like(http_get('/phase3?what=nothing'), qr/should be moved\/blocked before this./, 'nothing phase 3');
-like(http_get('/phase4?what=nothing'), qr/should not be moved\/blocked, headers delivered before phase 4./, 'nothing phase 4');
+like(http_get('/phase1?what=nothing'), qr/phase1\?what=nothing\' not found/, 'nothing phase 1');
+like(http_get('/phase2?what=nothing'), qr/phase2\?what=nothing\' not found/, 'nothing phase 2');
+like(http_get('/phase3?what=nothing'), qr/phase3\?what=nothing\' not found/, 'nothing phase 3');
+like(http_get('/phase4?what=nothing'), qr/phase4\?what=nothing\' not found/, 'nothing phase 4');
 
+
+###############################################################################
+
+sub http_daemon {
+	my $server = IO::Socket::INET->new(
+		Proto => 'tcp',
+		LocalHost => '127.0.0.1:' . port(8081),
+		Listen => 5,
+		Reuse => 1
+	)
+		or die "Can't create listening socket: $!\n";
+
+	local $SIG{PIPE} = 'IGNORE';
+
+	while (my $client = $server->accept()) {
+		$client->autoflush(1);
+
+		my $headers = '';
+		my $uri = '';
+
+		while (<$client>) {
+			$headers .= $_;
+			last if (/^\x0d?\x0a?$/);
+		}
+
+		$uri = $1 if $headers =~ /^\S+\s+([^ ]+)\s+HTTP/i;
+
+		if ($uri eq '/') {
+			print $client <<'EOF';
+HTTP/1.1 200 OK
+Connection: close
+
+EOF
+			print $client "TEST-OK-IF-YOU-SEE-THIS"
+				unless $headers =~ /^HEAD/i;
+
+		} elsif ($uri eq '/multi') {
+
+			print $client <<"EOF";
+HTTP/1.1 200 OK
+Connection: close
+
+TEST-OK-IF-YOU-SEE-THIS
+EOF
+
+			select undef, undef, undef, 0.1;
+			print $client 'AND-THIS';
+
+		} else {
+
+			print $client <<"EOF";
+HTTP/1.1 404 Not Found
+Connection: close
+
+Oops, '$uri' not found
+EOF
+		}
+
+		close $client;
+	}
+}
+
+###############################################################################
