@@ -1,0 +1,61 @@
+From: Kevin Roy <kiniou@gmail.com>
+Date: Fri, 14 Jun 2019 15:57:02 +0200
+Subject: openresty ssl patches
+
+---
+ src/event/ngx_event_openssl.c | 25 +++++++++++++++++++++++++
+ src/event/ngx_event_openssl.h |  5 +++++
+ 2 files changed, 30 insertions(+)
+
+diff --git a/src/event/ngx_event_openssl.c b/src/event/ngx_event_openssl.c
+index e591e44..d7eb9ef 100644
+--- a/src/event/ngx_event_openssl.c
++++ b/src/event/ngx_event_openssl.c
+@@ -1680,6 +1680,31 @@ ngx_ssl_handshake(ngx_connection_t *c)
+         return NGX_AGAIN;
+     }
+ 
++#if OPENSSL_VERSION_NUMBER >= 0x10002000L
++    if (sslerr == SSL_ERROR_WANT_X509_LOOKUP
++#   ifdef SSL_ERROR_PENDING_SESSION
++        || sslerr == SSL_ERROR_PENDING_SESSION
++
++#   elif defined(SSL_ERROR_WANT_CLIENT_HELLO_CB)
++        || sslerr == SSL_ERROR_WANT_CLIENT_HELLO_CB
++#   endif
++       )
++    {
++        c->read->handler = ngx_ssl_handshake_handler;
++        c->write->handler = ngx_ssl_handshake_handler;
++
++        if (ngx_handle_read_event(c->read, 0) != NGX_OK) {
++            return NGX_ERROR;
++        }
++
++        if (ngx_handle_write_event(c->write, 0) != NGX_OK) {
++            return NGX_ERROR;
++        }
++
++        return NGX_AGAIN;
++    }
++#endif
++
+     err = (sslerr == SSL_ERROR_SYSCALL) ? ngx_errno : 0;
+ 
+     c->ssl->no_wait_shutdown = 1;
+diff --git a/src/event/ngx_event_openssl.h b/src/event/ngx_event_openssl.h
+index 61da0c5..71195ca 100644
+--- a/src/event/ngx_event_openssl.h
++++ b/src/event/ngx_event_openssl.h
+@@ -64,6 +64,11 @@
+ #endif
+ 
+ 
++#ifdef SSL_ERROR_WANT_CLIENT_HELLO_CB
++#define HAVE_SSL_CLIENT_HELLO_CB_SUPPORT  1
++#endif
++
++
+ struct ngx_ssl_s {
+     SSL_CTX                    *ctx;
+     ngx_log_t                  *log;
