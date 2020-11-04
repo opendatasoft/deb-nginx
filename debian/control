@@ -17,7 +17,7 @@ Build-Depends: debhelper (>= 10),
                libperl-dev,
                libssl-dev,
                libxslt1-dev,
-               libmodsecurity-dev,
+               libmodsecurity-dev (= 3.0.3.201904111503-1~ods2),
                po-debconf,
                quilt,
                zlib1g-dev
