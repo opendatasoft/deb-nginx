@@ -1,3 +1,9 @@
+nginx (1.17.3-1~ods1) buster; urgency=medium
+
+  * Rebuild for debian buster
+
+ -- Kevin Roy <kiniou@gmail.com>  Wed, 04 Nov 2020 18:29:00 +0100
+
 nginx (1.17.3-1~ods) stretch; urgency=medium
 
   * New upstream version 1.17.3
@@ -2369,4 +2375,3 @@ nginx (0.4.2-1) unstable; urgency=low
   * Tweaked the configuration file and the path handling for Debian.
 
  -- Jose Parrella <joseparrella@cantv.net>  Thu, 14 Sep 2006 11:40:20 -0400
-
