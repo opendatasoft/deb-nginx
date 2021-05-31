@@ -1190,8 +1190,13 @@ ngx_http_core_auth_delay(ngx_http_request_t *r)
     ngx_log_error(NGX_LOG_INFO, r->connection->log, 0,
                   "delaying unauthorized request");
 
-    if (ngx_handle_read_event(r->connection->read, 0) != NGX_OK) {
-        return NGX_HTTP_INTERNAL_SERVER_ERROR;
+    if (r->connection->read->ready) {
+        ngx_post_event(r->connection->read, &ngx_posted_events);
+
+    } else {
+        if (ngx_handle_read_event(r->connection->read, 0) != NGX_OK) {
+            return NGX_HTTP_INTERNAL_SERVER_ERROR;
+        }
     }
 
     r->read_event_handler = ngx_http_test_reading;
@@ -1782,7 +1787,7 @@ ngx_http_send_response(ngx_http_request_t *r, ngx_uint_t status,
         }
     }
 
-    if (r->method == NGX_HTTP_HEAD || (r != r->main && val.len == 0)) {
+    if (r != r->main && val.len == 0) {
         return ngx_http_send_header(r);
     }
 
@@ -4076,14 +4081,6 @@ ngx_http_core_listen(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
                                "ngx_http_v2_module");
             return NGX_CONF_ERROR;
 #endif
-        }
-
-        if (ngx_strcmp(value[n].data, "spdy") == 0) {
-            ngx_conf_log_error(NGX_LOG_WARN, cf, 0,
-                               "invalid parameter \"spdy\": "
-                               "ngx_http_spdy_module was superseded "
-                               "by ngx_http_v2_module");
-            continue;
         }
 
         if (ngx_strncmp(value[n].data, "so_keepalive=", 13) == 0) {
