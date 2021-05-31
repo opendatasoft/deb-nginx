@@ -1,3 +1,9 @@
+nginx (1.19.9-1~ods) UNRELEASED; urgency=medium
+
+  * New upstream version 1.19.9
+
+ -- Kevin Roy <kiniou@gmail.com>  Mon, 31 May 2021 15:50:50 +0200
+
 nginx (1.17.3-1~ods) stretch; urgency=medium
 
   * New upstream version 1.17.3
@@ -2369,4 +2375,3 @@ nginx (0.4.2-1) unstable; urgency=low
   * Tweaked the configuration file and the path handling for Debian.
 
  -- Jose Parrella <joseparrella@cantv.net>  Thu, 14 Sep 2006 11:40:20 -0400
-
