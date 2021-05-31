@@ -1,8 +1,8 @@
-nginx (1.17.3-1~ods1) buster; urgency=medium
+nginx (1.19.9-1~ods) UNRELEASED; urgency=medium
 
-  * Rebuild for debian buster
+  * New upstream version 1.19.9
 
- -- Kevin Roy <kiniou@gmail.com>  Wed, 04 Nov 2020 18:29:00 +0100
+ -- Kevin Roy <kiniou@gmail.com>  Mon, 31 May 2021 15:50:50 +0200
 
 nginx (1.17.3-1~ods) stretch; urgency=medium
 
